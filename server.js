@@ -232,4 +232,4 @@ function _checkTeam(){
 
 
 
-server.listen(process.env.PORT || 8080v, "0.0.0.0" ,() => {console.log("Server started at port : 8080");});
+server.listen(process.env.PORT || 8080, "0.0.0.0" ,() => {console.log("Server started at port : 8080");});
