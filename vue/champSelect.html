@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <link rel="stylesheet" href="champSelect.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content>
+
+                <v-container fluid class="main" id="main">
+
+                    <div class="selectImage">
+                        <img :src="imgSelectedChampion" alt="" v-show="imgSelectedChampion" class="imgSelectedChampion" id="imgSelectedChampion">
+                    </div>
+
+                    <v-row class="justify-space-around flex-row top">
+                        <h1 class="white--text display-1" v-text="messageTop"></h1>
+                    </v-row>
+                    <v-row class="flex-column align-center top">
+                        <h1 class="display-1 white--text" v-text="timer"></h1>
+
+                        <div class="w3-light-grey progressBarElement">
+                            <div class="w3-blue" style="height:10px;" id="progressBar"></div>
+                        </div>
+
+                    </v-row>
+
+                    <v-row class="flex-row justify-space-between mt-10 bottom">
+
+                        <v-list disabled color="transparent" class="listL">
+                            <h1 class="display-2 name text-center white--text">Team Bleu</h1>
+                            <v-list-item-group>
+                                <v-list-item v-for="(player, pl) in listLeft" :key="pl" class="my-10" :class="{playerTurn: player.id == playerSelection}">
+                                    <v-list-item-icon>
+                                        <v-progress-circular v-if="listLeft[pl].avatar" :size="80" color="amber" indeterminate><v-avatar size="75"><v-img v-if="listLeft[pl].avatar" :src="listLeft[pl].avatar" class="imgAvatar"></v-img><div v-else  class="imgElse"></div></v-avatar></v-progress-circular>
+                                        <v-avatar v-else size="75"><div class="imgElse"></div></v-avatar>                                 
+                                    </v-list-item-icon>
+                                    <v-list-item-content>
+                                        <v-list-item-title class="headline name white--text">
+                                            <p v-if="listLeft[pl].champion">{{listLeft[pl].champion}}</p>
+                                            <p v-else>Choix en cours</p>
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle class="subtitle-1 name white--text">
+                                            {{ player.pseudo }}
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+
+
+                        
+                        <v-row class="flex-row listChamp justify-center">
+                            <v-col v-for="(champ, c) in champions" :key="c" cols="12" lg="2" class="text-center" v-if="displayChamp" >
+                                
+                                <v-img :src="champ.avatar" width="100" height="100" class="imgChamp mx-auto" @click="thisChamp(c, champ.name, champ.avatar)"></v-img>
+                                <p>{{champ.name}}</p>
+
+                            </v-col>
+                            
+                            <v-btn x-large color="primary" dark style="position: fixed; bottom: 5px;" v-if="displayChamp" @click="playerSelectionFunction()">Verrouiller</v-btn>
+                        </v-row>
+                        
+
+
+                        <v-list disabled color="transparent" class="listR">
+                            <h1 class="display-2 name text-center white--text">Team Rouge</h1>
+                            <v-list-item-group>
+                                <v-list-item v-for="(player, pr) in listRight" :key="pr" class="my-10" :class="{playerTurnR: player.id == playerSelection}">
+                                    <v-list-item-content>
+                                        <v-list-item-title class="headline name text-right white--text">
+                                            <p v-if="listRight[pr].champion">{{listRight[pr].champion}}</p>
+                                            <p v-else>Choix en cours</p>
+                                        </v-list-item-title>
+                                        <v-list-item-subtitle class="subtitle-1 name text-right white--text">
+                                            {{ player.pseudo }}
+                                        </v-list-item-subtitle>
+                                    </v-list-item-content>
+                                    <v-list-item-icon>
+                                        <v-progress-circular v-if="listRight[pr].avatar" :size="80" color="amber" indeterminate><v-avatar size="75"><v-img v-if="listRight[pr].avatar" :src="listRight[pr].avatar" class="imgAvatar"></v-img><div v-else  class="imgElse"></div></v-avatar></v-progress-circular>
+                                        <v-avatar v-else size="75"><div class="imgElse"></div></v-avatar> </v-list-item-icon>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+
+                    </v-row>
+
+                
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+
+
+    <audio autoplay id='backgroundSound'>
+        <source src="selection.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="selectChamp">
+        <source src="click.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="timeSound">
+        <source src="time.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="validInscription">
+        <source src="inscription.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+        document.getElementById('backgroundSound').volume = 0.5;
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="champSelect.js"></script>
+</body>
+</html>
