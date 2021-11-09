@@ -6,28 +6,28 @@ window.addEventListener("DOMContentLoaded", (e) => {
         vuetify: new Vuetify(),
         data: {
             
-            messageTop: '',
-            waitingOther:'',
-            reduceTime: '',
-            timeOut: '',
+            messageTop: "",
+            waitingOther:"",
+            reduceTime: "",
+            timeOut: "",
             
-            account: '',
+            account: "",
             players: [],
             listLeft: [],
             listRight: [],
-            playerSelection: '',
+            playerSelection: "",
 
             
             displayChamp: false,
             champions: [],
-            selectedChampion: '',
-            imgSelectedChampion: '',
+            selectedChampion: "",
+            imgSelectedChampion: "",
 
             timer: 0,
             valueProgress: 1,
 
-            soundTime: document.getElementById('timeSound'),
-            soundSelectChamp: document.getElementById('validInscription'),
+            soundTime: document.getElementById("timeSound"),
+            soundSelectChamp: document.getElementById("validInscription"),
         },
 
         methods: {
@@ -35,18 +35,18 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
             getAllChamp: function() {
 
-                var myInit = { method: 'GET',
-                mode: 'cors',
-                cache: 'default' };
+                var myInit = { method: "GET",
+                mode: "cors",
+                cache: "default" };
 
-                fetch('https://ddragon.leagueoflegends.com/cdn/10.8.1/data/fr_FR/champion.json', myInit)
+                fetch("https://ddragon.leagueoflegends.com/cdn/10.8.1/data/fr_FR/champion.json", myInit)
                     .then((response) => response.json())
                     .then((data) => {
                         const listChamp = Object.values(data.data);
                         let index = 0;
                         listChamp.forEach(champion => {
 
-                            this.champions.push({index: index, name: champion.name, avatar: 'https://ddragon.leagueoflegends.com/cdn/10.8.1/img/champion/' + champion.image.full});
+                            this.champions.push({index: index, name: champion.name, avatar: "https://ddragon.leagueoflegends.com/cdn/10.8.1/img/champion/" + champion.image.full});
                             index++;
                         });
 
@@ -75,7 +75,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
             timerReducerSelection: function() {
                 
                 if(this.timer === 1){
-                    document.getElementById('progressBar').classList.remove('reduceProgressBarSelection');
+                    document.getElementById("progressBar").classList.remove("reduceProgressBarSelection");
                     clearInterval(this.reduceTime);
                 }
                 else if(this.timer < 10){
@@ -94,7 +94,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
             playerSelectionFunction: function() {
 
-                socket.emit('confirmChamp', this.selectedChampion, this.account);
+                socket.emit("confirmChamp", this.selectedChampion, this.account);
                 this.soundSelectChamp.play();
             },
 
@@ -105,7 +105,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
             thisChamp: function(id, name, avatar) {
 
-                let selectChamp = document.getElementById('selectChamp');
+                let selectChamp = document.getElementById("selectChamp");
                 selectChamp.play();
 
                 this.selectedChampion = {
@@ -113,7 +113,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
                     name: name,
                     avatar: avatar
                 };
-                socket.emit('thinkChamp', this.selectedChampion, this.account);
+                socket.emit("thinkChamp", this.selectedChampion, this.account);
             },
         
 
@@ -124,13 +124,13 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 
 
-            socket.on('champSelect', () => {
+            socket.on("champSelect", () => {
                 
                 this.getAllChamp();
                 
-                let pseudo = sessionStorage.getItem('pseudo');
-                let team = sessionStorage.getItem('team');
-                let accountsJSON= localStorage.getItem('accounts');
+                let pseudo = sessionStorage.getItem("pseudo");
+                let team = sessionStorage.getItem("team");
+                let accountsJSON= localStorage.getItem("accounts");
                 
                 this.players = JSON.parse(accountsJSON);
 
@@ -142,16 +142,16 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
                 this.players.forEach(element => {
                     if(element.team === "Red Side") {
-                        this.listRight.push({id: this.players.findIndex(player => player.pseudo == element.pseudo), pseudo: element.pseudo, champion: '', avatar: ''});
+                        this.listRight.push({id: this.players.findIndex(player => player.pseudo == element.pseudo), pseudo: element.pseudo, champion: "", avatar: ""});
                     }
                     else if(element.team === "Blue Side") {
-                        this.listLeft.push({id: this.players.findIndex(player => player.pseudo == element.pseudo), pseudo: element.pseudo, champion: '', avatar: ''});
+                        this.listLeft.push({id: this.players.findIndex(player => player.pseudo == element.pseudo), pseudo: element.pseudo, champion: "", avatar: ""});
                     }
 
                 });
                 
-                this.messageTop = 'En attentes des joueurs';
-                socket.emit('loaded', this.players);
+                this.messageTop = "En attentes des joueurs";
+                socket.emit("loaded", this.players);
 
             });
 
@@ -160,19 +160,19 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 
 
-            socket.on('allLoaded', () => {
-                socket.emit('launchSelection', this.listLeft, this.listRight);
+            socket.on("allLoaded", () => {
+                socket.emit("launchSelection", this.listLeft, this.listRight);
             });
 
 
 
 
 
-            socket.on('yourTurn', (content, index) => {
+            socket.on("yourTurn", (content, index) => {
 
-                this.messageTop = 'En attente de selection de ' + content.pseudo;
+                this.messageTop = "En attente de selection de " + content.pseudo;
 
-                document.getElementById('progressBar').classList.add('reduceProgressBarSelection');
+                document.getElementById("progressBar").classList.add("reduceProgressBarSelection");
                 this.setTimerFunctionSelection();
 
                 this.playerSelection = content.id;
@@ -183,8 +183,8 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
                     this.timeOut = setTimeout(() => {
                         this.displayChamp = false;
-                        socket.emit('finishTurn', this.listLeft, this.listRight, {team: index.team, index: index.index});
-                        socket.emit('confirmChamp', this.selectedChampion, this.account);
+                        socket.emit("finishTurn", this.listLeft, this.listRight, {team: index.team, index: index.index});
+                        socket.emit("confirmChamp", this.selectedChampion, this.account);
                     }, 32000);
                 }
             
@@ -195,17 +195,17 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 
 
-            socket.on('thinkChamp', (champion, account) => {
+            socket.on("thinkChamp", (champion, account) => {
                 
                 
 
-                if(account.team === 'Red Side'){
+                if(account.team === "Red Side"){
                     let index = this.listRight.findIndex(player => player.pseudo == account.pseudo);
                     
                     this.listRight[index].champion = champion.name;
                     this.listRight[index].avatar = champion.avatar;
                 }
-                else if(account.team === 'Blue Side'){
+                else if(account.team === "Blue Side"){
                     let index = this.listLeft.findIndex(player => player.pseudo == account.pseudo); 
 
                     this.listLeft[index].champion = champion.name;
@@ -216,24 +216,24 @@ window.addEventListener("DOMContentLoaded", (e) => {
             });
 
 
-            socket.on('confirmChamp', (champion, account) => {
+            socket.on("confirmChamp", (champion, account) => {
                
                 this.imgSelectedChampion = "http://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + champion.name + "_0.jpg";
-                document.getElementById('imgSelectedChampion').classList.add('animationImgSelectedChampion');
+                document.getElementById("imgSelectedChampion").classList.add("animationImgSelectedChampion");
 
                 setTimeout(() => {
                     this.imgSelectedChampion = "";
-                    document.getElementById('imgSelectedChampion').classList.remove('animationImgSelectedChampion');
+                    document.getElementById("imgSelectedChampion").classList.remove("animationImgSelectedChampion");
                 }, 1500);
                 
             });
 
 
 
-            socket.on('FINISH', ()=> {
+            socket.on("FINISH", ()=> {
                 this.messageTop = "Lancement de la partie";
                 setTimeout(() => {
-                    window.location.href = '/game';
+                    window.location.href = "/game";
                 }, 7000);
             });
         },
