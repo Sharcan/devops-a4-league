@@ -49,7 +49,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [12.x]
@@ -63,4 +63,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run tests
+    - run: npm run test
