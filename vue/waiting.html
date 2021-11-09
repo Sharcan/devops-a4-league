@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="waiting.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-content>
+                <v-container fluid class="main">
+                    
+                    
+                    <h1 class="text-center white--text">Champion Selection</h1>
+
+
+                    <h1 class="text-center white--text" v-text="timer"></h1>
+
+
+                    <v-alert type="success" v-if="showBeginMessage" class=" mt-8">
+                        La selection des champions va commencer !
+                    </v-alert>
+
+                    <v-card class="mx-auto mt-12" max-width="700">
+                        
+                        <h2 class="text-center headline py-5">Entrez votre pseudo pour intégrer une équipe !</h2>
+
+                        <v-card-actions class="d-flex flex-column">
+                            <v-col cols="8">
+                                <v-text-field label="Pseudo" width="12%" v-model="pseudo" :disabled="disabled"></v-text-field>
+
+                                <v-alert type="error" v-if="showErrorMessage">
+                                    Pseudo déjà utilisé, veuillez en choisir un autre
+                                </v-alert>
+
+
+                                <v-select
+                                :items="items"
+                                filled
+                                label="Choisissez une équipe"
+                                v-model="team"
+                                :disabled="disabled"
+                                ></v-select>
+
+                                <v-alert type="error" v-text="showErrorTeamMessage" v-if="showErrorTeamMessage"></v-alert>
+
+                                <v-btn color="error" v-on:click="addPseudo" :disabled="disabled">S'inscrire</v-btn>
+                            </v-col>
+                        </v-card-actions>
+                        
+                    </v-card>
+                    
+                    <v-card max-width="700" class="mx-auto mt-8 players">
+                        <h2 class="text-center headline py-5">Joueurs en attentes</h2>
+                        <v-col cols="12" class="mx-auto">
+                            <v-list>
+                                <v-list-item-group color="error">
+                                    <v-list-item v-for="(account, i) in accounts" :key="i">
+                                        <v-list-item-content>
+                                            <v-list-item-title class="headline">{{account.pseudo}}</v-list-item-title>
+                                        </v-list-item-content>
+                                        <v-list-item-icon>
+                                            <v-img v-if="account.team == 'Blue Side'" src="blue.png" width="30px"></v-img>
+                                            <v-img v-if="account.team == 'Red Side'" src="red.png" width="30px"></v-img>
+                                        </v-list-item-icon>
+                                    </v-list-item>
+                                </v-list-item-group>
+                            </v-list>
+                        </v-col>
+                    </v-card>
+                    
+                    <v-text-field label="Joueurs Max"  v-model="maxPlayer" :disabled="disabled"></v-text-field>
+                    <v-btn color="primary" v-on:click="maxPlayerFunction" :disabled="disabled">i</v-btn>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+
+    <audio autoplay loop id='backgroundSound'>
+        <source src="queu.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="validInscription">
+        <source src="inscription.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="timeSound">
+        <source src="time.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        document.getElementById('backgroundSound').volume = 0.5;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="waiting.js"></script>
+</body>
+</html>
