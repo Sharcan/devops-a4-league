@@ -1,5 +1,5 @@
-describe('League Tests', function() {
-    it('is server launched', function(done) {
+describe("League Tests", function() {
+    it("is server launched", function(done) {
   
       if (5 == 5) {
         done();
