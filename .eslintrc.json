@@ -1,0 +1,18 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "plugin:vue/essential",
+    "parserOptions": {
+        "ecmaVersion": 13
+    },
+    "plugins": [
+        "vue"
+    ],
+    "rules": {
+        "semi": ["error", "always"],
+        "quotes": ["error", "double"]
+    }
+}
