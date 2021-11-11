@@ -60,6 +60,7 @@ jobs:
   njsscan:
     runs-on: ubuntu-latest
     name: njsscan check
+    needs: tests
     steps:
     - name: Checkout the code
       uses: actions/checkout@v2
