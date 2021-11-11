@@ -11,14 +11,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    needs: eslint
     strategy:
       matrix:
         node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -31,12 +28,9 @@ jobs:
 
   eslint:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -49,12 +43,10 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-
+    needs: build
     strategy:
       matrix:
         node-version: [12.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -79,6 +71,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: njsscan
     steps:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12
