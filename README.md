@@ -1,5 +1,10 @@
 # Projet s'inspirant de League of Legends appliquant les principes Devops
 ## Nicolas Brazzolotto
+
+### IMPORTANT
+Ce repository n'est pas l'originale, il ne possède donc pas l'ensemble des branches/commits qui ont été créés pour mettre en place le devops/gitflow.  
+Ce lien: https://github.com/Sharcan/devops-a4-league amène directement au repository orginal.
+
 ### Explication
 Ce projet a pour principe de recréer la selection des champions lors d'un lancement de partie sur League Of Legends.
 Ce projet est totalement fonctionnel, pour le tester il suffit d'ouvrir 2 onglets, sur chaque onglet s'inscrire et la partie commencera automatiquement.
